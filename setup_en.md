@@ -6,8 +6,14 @@
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
 
 ### First time setup
-If you downloaded the mod from the GitHub, you should already be good to go.
-Just generate a seed, connect the client, boot the game up and start playing!
+In compliance with main server fangame policies, I am no longer able to distribute the mod in its whole due to distributing game files without permission.
+While I am working on getting this permission from the UTY team, in the meantime I have created a patch.
+The setup instructions are as follows:
+
+STEP 1: Download Undertale Yellow version 1.1
+STEP 2: Extract the file and put the Undertale Yellow v1.1 folder directly into your Arcipelago install
+STEP 3: Open the Undertale Yellow client and run /patch
+STEP 4: Run Undertale Yellow.exe and enjoy!
 
 **Linux Users**: For Linux users, however, I have not been able to test it. You will need to run the
 game from Proton or Wine as this is built off the Windows version. You may also need to redirect the client
@@ -16,6 +22,6 @@ with I believe that first part depending on what you use to run the game.
 
 ### Bug Reporting
 The game is new and this is my first mod, so if there are any bugs or logic errors please please please report them to me. This can be done
-through Discord DM (Username: Pugie38), or through the Undertale Yellow thread in the Archipelago Unoffical Server.
+through Discord DM (Username: Pugie38), or through the Undertale Yellow thread in the Archipelago Official Server.
 
 
