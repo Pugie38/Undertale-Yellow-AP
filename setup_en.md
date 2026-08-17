@@ -10,8 +10,8 @@ In compliance with main server fangame policies, I am no longer able to distribu
 While I am working on getting this permission from the UTY team, in the meantime I have created a patch.
 The setup instructions are as follows:
 
-- STEP 1: Download Undertale Yellow version 1.1
-- STEP 2: Extract the file and put the Undertale Yellow v1.1 folder directly into your Archipelago install
+- STEP 1: Download Undertale Yellow version 1.3.1
+- STEP 2: Extract the file and put the "Undertale Yellow v-1-3-1" folder directly into your Archipelago install
 - STEP 3: Open the Undertale Yellow client and run /patch
 - STEP 4: Run Undertale Yellow.exe and enjoy!
 
