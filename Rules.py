@@ -144,7 +144,9 @@ def set_rules(world: "UndertaleYellowWorld"):
                  lambda state: state.can_reach("Steamworks Neutral", "Region", player)),
         set_rule(multiworld.get_location("Steamworks Exit: Neutral Friendliness Pellets", player),
                  lambda state: state.can_reach("Steamworks Axis", "Region", player) and state.has("Hydrochloric Acid", player))
-    if _undertale_is_route(world, 0) and (not _undertale_is_route(world, 3)):
+    if _undertale_is_route(world, route=0) and not _undertale_is_route(world, route=3):
+        set_rule(multiworld.get_location("Steamworks Exit: Broken Vending Machine", player),
+                 lambda state: state.can_reach("Steamworks Axis", "Region", player) and state.has("Hydrochloric Acid", player))
         set_rule(multiworld.get_location("Axis Pacifist/Neutral Victory", player),
                  lambda state: state.can_reach("Steamworks Axis", "Region", player) and state.has("Hydrochloric Acid", player))
     if _undertale_is_route(world, 2):
@@ -201,9 +203,6 @@ def set_rules(world: "UndertaleYellowWorld"):
     if (not _undertale_is_route(world, 1)) or _undertale_is_route(world, 3):
         set_rule(multiworld.get_location("Steamworks Neutral: Closet Water", player),
                 lambda state: state.can_reach("Steamworks Neutral", "Region", player)),
-    if (not _undertale_is_route(world, 1) and not _undertale_is_route(world, 2)) or _undertale_is_route(world, 3):
-        set_rule(multiworld.get_location("Axis Pacifist/Neutral Victory", player),
-                 lambda state: state.can_reach("Steamworks Axis", "Region", player) and state.has("Hydrochloric Acid", player))
     if _undertale_is_route(world, 2) and \
             (bool(world.options.rando_love.value) or bool(world.options.rando_stats.value)):
         maxlv = 1

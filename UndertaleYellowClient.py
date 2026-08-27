@@ -26,7 +26,7 @@ class UndertaleYellowCommandProcessor(ClientCommandProcessor):
     def _cmd_patch(self):
         """Patch the game."""
         if isinstance(self.ctx, UndertaleYellowContext):
-            os.makedirs(name=Utils.user_path("Undertale Yellow v1_1"), exist_ok=True)
+            os.makedirs(name=Utils.user_path("Undertale Yellow v-1-3-1"), exist_ok=True)
             self.ctx.patch_game()
             self.output("Patched.")
 
@@ -72,9 +72,9 @@ class UndertaleYellowContext(CommonContext):
         self.save_game_folder = os.path.expandvars(r"%localappdata%/Undertale_Yellow")
 
     def patch_game(self):
-        with open(Utils.user_path("Undertale Yellow v1_1", "data.win"), "rb") as f:
+        with open(Utils.user_path("Undertale Yellow v-1-3-1", "data.win"), "rb") as f:
             patchedFile = bsdiff4.patch(f.read(), undertale_yellow.data_path("Patch.bsdiff"))
-        with open(Utils.user_path("Undertale Yellow v1_1", "data.win"), "wb") as f:
+        with open(Utils.user_path("Undertale Yellow v-1-3-1", "data.win"), "wb") as f:
             f.write(patchedFile)
 
     async def server_auth(self, password_requested: bool = False):
