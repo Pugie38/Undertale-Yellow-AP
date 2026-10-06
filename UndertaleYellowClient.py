@@ -49,8 +49,8 @@ class UndertaleYellowCommandProcessor(ClientCommandProcessor):
 
 
 class UndertaleYellowContext(CommonContext):
-    tags = {"AP", "Online"}
-    game = "Undertale"
+    tags = {"AP"}
+    game = "Undertale Yellow"
     command_processor = UndertaleYellowCommandProcessor
     items_handling = 0b111
     route = None
@@ -91,7 +91,7 @@ class UndertaleYellowContext(CommonContext):
                 if "check.spot" == file or "scout" == file:
                     os.remove(os.path.join(root, file))
                 elif file.endswith((".item", ".victory", ".route", ".playerspot", ".mad",
-                                            ".youDied", ".LV", ".mine", ".flag", ".hint", ".grind")):
+                                            ".youDied", ".LV", ".mine", ".flag", ".hint", ".grind", ".sanity")):
                     os.remove(os.path.join(root, file))
 
     async def connect(self, address: typing.Optional[str] = None):
@@ -109,15 +109,6 @@ class UndertaleYellowContext(CommonContext):
     async def shutdown(self):
         self.clear_undertale_yellow_files()
         await super().shutdown()
-
-    def update_online_mode(self, online):
-        old_tags = self.tags.copy()
-        if online:
-            self.tags.add("Online")
-        else:
-            self.tags -= {"Online"}
-        if old_tags != self.tags and self.server and not self.server.socket.closed:
-            async_start(self.send_msgs([{"cmd": "ConnectUpdate", "tags": self.tags}]))
 
     def on_package(self, cmd: str, args: dict):
         if cmd == "Connected":
@@ -139,26 +130,6 @@ class UndertaleYellowContext(CommonContext):
     def on_deathlink(self, data: typing.Dict[str, typing.Any]):
         self.got_deathlink = True
         super().on_deathlink(data)
-
-
-def to_room_name(place_name: str):
-    if place_name == "Old Home Exit":
-        return "room_ruinsexit"
-    elif place_name == "Snowdin Forest":
-        return "room_tundra1"
-    elif place_name == "Snowdin Town Exit":
-        return "room_fogroom"
-    elif place_name == "Waterfall":
-        return "room_water1"
-    elif place_name == "Waterfall Exit":
-        return "room_fire2"
-    elif place_name == "Hotland":
-        return "room_fire_prelab"
-    elif place_name == "Hotland Exit":
-        return "room_fire_precore"
-    elif place_name == "Core":
-        return "room_fire_core1"
-
 
 async def process_undertale_yellow_cmd(ctx: UndertaleYellowContext, cmd: str, args: dict):
     if cmd == "Connected":
@@ -183,6 +154,14 @@ async def process_undertale_yellow_cmd(ctx: UndertaleYellowContext, cmd: str, ar
                 f.close()
         if args["slot_data"]["reduce_grind"]:
             filename = f"reducegrind.grind"
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
+                f.close()
+        if args["slot_data"]["sparesanity"]:
+            filename = f"spare.sanity"
+            with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
+                f.close()
+        if args["slot_data"]["killsanity"]:
+            filename = f"kill.sanity"
             with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
                 f.close()
         filename = f"{ctx.route}.route"
@@ -216,6 +195,7 @@ async def process_undertale_yellow_cmd(ctx: UndertaleYellowContext, cmd: str, ar
         if str(ctx.slot)+" RoutesDone pacifist" in args["keys"]:
             if args["keys"][str(ctx.slot) + " RoutesDone pacifist"] is not None:
                 ctx.completed_routes["pacifist"] = args["keys"][str(ctx.slot)+" RoutesDone pacifist"]
+
     elif cmd == "SetReply":
         if args["value"] is not None:
             if str(ctx.slot)+" RoutesDone pacifist" == args["key"]:
@@ -306,38 +286,6 @@ async def process_undertale_yellow_cmd(ctx: UndertaleYellowContext, cmd: str, ar
                     f.write(str(ss-12000)+"\n")
                 f.close()
 
-    elif cmd == "Bounced":
-        tags = args.get("tags", [])
-        if "Online" in tags:
-            data = args.get("data", {})
-            if data["player"] != ctx.slot and data["player"] is not None:
-                filename = f"FRISK" + str(data["player"]) + ".playerspot"
-                with open(os.path.join(ctx.save_game_folder, filename), "w") as f:
-                    f.write(str(data["x"]) + str(data["y"]) + str(data["room"]) + str(
-                        data["spr"]) + str(data["frm"]))
-                    f.close()
-
-
-async def multi_watcher(ctx: UndertaleYellowContext):
-    while not ctx.exit_event.is_set():
-        path = ctx.save_game_folder
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                if "spots.mine" in file and "Online" in ctx.tags:
-                    with open(os.path.join(root, file), "r") as mine:
-                        this_x = mine.readline()
-                        this_y = mine.readline()
-                        this_room = mine.readline()
-                        this_sprite = mine.readline()
-                        this_frame = mine.readline()
-                        mine.close()
-                    message = [{"cmd": "Bounce", "tags": ["Online"],
-                                "data": {"player": ctx.slot, "x": this_x, "y": this_y, "room": this_room,
-                                         "spr": this_sprite, "frm": this_frame}}]
-                    await ctx.send_msgs(message)
-
-        await asyncio.sleep(0.1)
-
 
 async def game_watcher(ctx: UndertaleYellowContext):
     while not ctx.exit_event.is_set():
@@ -426,9 +374,6 @@ def main():
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         asyncio.create_task(
             game_watcher(ctx), name="UndertaleYellowProgressionWatcher")
-
-        asyncio.create_task(
-            multi_watcher(ctx), name="UndertaleYellowMultiplayerWatcher")
 
         if gui_enabled:
             ctx.run_gui()

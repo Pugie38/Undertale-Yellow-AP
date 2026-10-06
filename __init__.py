@@ -69,7 +69,8 @@ class UndertaleYellowWorld(World):
             "rando_item_button": bool(self.options.rando_item_button.value),
             "route_required": int(self.options.route_required.value),
             "reduce_grind": bool(self.options.reduce_grind.value),
-
+            "sparesanity": bool(self.options.sparesanity.value),
+            "killsanity": bool(self.options.killsanity.value),
         }
 
     def get_filler_item_name(self):
@@ -107,13 +108,12 @@ class UndertaleYellowWorld(World):
                         "Progressive Armor" for item in itempool]
         if self.options.prog_ammo:
             itempool = [item if item not in ammo else "Progressive Ammo" for item in itempool]
-        if self.options.extra_stats:
-                if self.options.route_required == "genocide" or self.options.route_required == "all_routes":
-                    if self.options.rando_stats:
-                            itempool += ["ATK Up"] * 10
-                            itempool += ["HP Up"] * 10
-                    elif self.options.rando_love:
-                            itempool += ["LOVE"] * 10
+        if self.options.route_required == "genocide" or self.options.route_required == "all_routes":
+            if self.options.rando_stats:
+                itempool += ["ATK Up"] * self.options.extra_atk.value
+                itempool += ["HP Up"] * self.options.extra_hp.value
+            elif self.options.rando_love:
+                itempool += ["LOVE"] * self.options.extra_love.value
 
         starting_key = self.options.starting_area.current_key.title() + " Key"
         itempool.remove(starting_key)
@@ -155,15 +155,22 @@ class UndertaleYellowWorld(World):
                               if loc_data.region == region_name and
                               (loc_name not in exclusion_table["NoMinigames"] or
                                (self.options.minigames and self.options.route_required != "genocide")) and
+                              (loc_name not in exclusion_table["NoSpareSanity"] or
+                               (self.options.sparesanity and self.options.route_required != "genocide")) and
+                              (loc_name not in exclusion_table["NoKillSanity"] or
+                               (self.options.killsanity and (self.options.route_required == "genocide" or self.options.route_required == "all_routes"))) and
                               (loc_name not in exclusion_table["NoStats"] or
                               (self.options.rando_stats and
                                (self.options.route_required == "genocide" or
                                 self.options.route_required == "all_routes"))) and
+                              (loc_name not in exclusion_table["ReduceGrind"] or not self.options.reduce_grind)  and
+                              (loc_name not in exclusion_table["ReduceGrind"] or not self.options.reduce_grind) and
                               (loc_name not in exclusion_table["NoLove"] or
                               (self.options.rando_love and
                                (self.options.route_required == "genocide" or
                                 self.options.route_required == "all_routes"))) and
                               loc_name not in exclusion_table[self.options.route_required.current_key]]
+
             for exit in exits:
                 ret.exits.append(Entrance(self.player, exit, ret))
             return ret

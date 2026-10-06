@@ -24,18 +24,15 @@ class ProgressiveArmor(Toggle):
     display_name = "Progressive Armor"
     default = 0
 
-
 class ProgressiveAmmo(Toggle):
     """Makes the ammo progressive."""
     display_name = "Progressive Ammo"
     default = 0
 
-
 class RandomizeLove(Toggle):
     """Adds LOVE to the pool. Only matters if your goal includes Genocide route"""
     display_name = "Randomize LOVE"
     default = 0
-
 
 class RandomizeStats(Toggle):
     """Makes each stat increase from LV a separate item. Only matters if your goal includes Genocide route
@@ -43,25 +40,46 @@ class RandomizeStats(Toggle):
     display_name = "Randomize Stats"
     default = 0
 
-
 class RandoBattleOptions(Toggle):
     """Turns the ITEM button in battle into an item you have to receive."""
     display_name = "Randomize Item Button"
     default = 0
 
 class ReduceGrind(Toggle):
-    """Halves the amount of basic enemies needed to defeat per area in Genocide. Basic Enemies will give double experience to compensate."""
+    """Halves the amount of basic enemies needed to defeat per area in Genocide. Basic Enemies will give double experience to compensate.
+    Also halves checks for Sparesanity and Killsanity"""
     display_name = "Reduce Grind"
-
     default = 0
-class ExtraStats(Toggle):
-    """Adds in 10 extra ATK Up and HP UP or 10 extra LOVE depending on settings. Has no effect if route is Pacifist or Neutral, or if rando stats and love is turned off."""
-    display_name = "Extra Stats"
+class ExtraHP(Range):
+    """Adds in extra HP Up's equal to the number set (Only affects Genocide/All Routes if State Rando is enabled)"""
+    display_name = "Extra HP"
     default = 0
+    range_start = 0
+    range_end = 10
+class ExtraATK(Range):
+    """Adds in extra ATK Up's equal to the number set (Only affects Genocide/All Routes if Stat Rando is enabled)"""
+    display_name = "Extra ATK"
+    default = 0
+    range_start = 0
+    range_end = 10
+class ExtraLOVE(Range):
+    """Adds in extra LOVE equal to the number set (Only affects Genocide/All Routes if LOVE Rando is enabled and Stat Rando is disabled)"""
+    display_name = "Extra LOVE"
+    default = 0
+    range_start = 0
+    range_end = 10
 class Minigames(Toggle):
     """Adds in Minigame Checks, including checks every 250 points in Mew Mew Love Blaster, Gold and Silver Rank in Six Shooter (45s and 75s respectively),
      and simply beating both minigames."""
     display_name = "Enable Minigames"
+    default = 0
+class SpareSanity(Toggle):
+    "Makes Sparing Enemies checks, 20 checks per area (Reduced to 10 if Reduced Grind is on)"
+    display_name = "Sparesanity"
+    default = 0
+class KillSanity(Toggle):
+    "Makes Killing Enemies checks, 20 checks per area (Reduced to 10 if Reduced Grind is on)"
+    display_name = "Killsanity"
     default = 0
 @dataclass
 class UndertaleYellowOptions(PerGameCommonOptions):
@@ -73,5 +91,9 @@ class UndertaleYellowOptions(PerGameCommonOptions):
     rando_stats:                              RandomizeStats
     rando_item_button:                        RandoBattleOptions
     reduce_grind:                             ReduceGrind
-    extra_stats:                              ExtraStats
+    extra_hp:                                 ExtraHP
+    extra_atk:                                ExtraATK
+    extra_love:                               ExtraLOVE
     minigames:                                Minigames
+    sparesanity:                              SpareSanity
+    killsanity:                               KillSanity
