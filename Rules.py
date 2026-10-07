@@ -359,7 +359,7 @@ def set_rules(world: "UndertaleYellowWorld"):
                                     lambda state: (state.can_reach("Steamworks Neutral", "Region", player) and state.has("HP Up", player, 11) and state.has("Hydrochloric Acid", player)), combine="or")
                         elif _undertale_is_stats_rando(world, rando_stats=False) and _undertale_is_love_rando(world, rando_love=True):
                             add_rule(multiworld.get_location(("LOVE "+str(maxlv)), player),
-                                    lambda state: (state.can_reach("Steamworks Neutral", "Region", player) and state.has("LOVE", player, 11 and state.has("Hydrochloric Acid", player))), combine="or")
+                                    lambda state: (state.can_reach("Steamworks Neutral", "Region", player) and state.has("LOVE", player, 11) and state.has("Hydrochloric Acid", player)), combine="or")
                         else:
                             add_rule(multiworld.get_location(("LOVE "+str(maxlv)), player),
                                     lambda state: (state.can_reach("Steamworks Neutral", "Region", player) and state.has("Hydrochloric Acid", player) and state.has("Dunes Key", player)), combine="or")
